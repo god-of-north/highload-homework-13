@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web1:
+    build: ./services/web
+    environment:
+      FLASK_APP: web.py
+      APP_FOLDER: /home/app/web
+    command: gunicorn --bind 0.0.0.0:5000 manage:app
+    ports:
+      - 5000:5000
+    networks:
+      hw13_subnet:
+        ipv4_address: 172.16.1.20
+
+  tester:
+    build: ./services/web
+    environment:
+      FLASK_APP: web.py
+      APP_FOLDER: /home/app/web
+    command: tail -f /dev/null
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
+      - 172.16.1.10
+    networks:
+      hw13_subnet:
+        ipv4_address: 172.16.1.100
+
+  bind:
+    image: ubuntu/bind9:9.16-21.10_beta
+    ports:
+    - "53:53/udp"
+    - "53:53/tcp"
+    - "10000:10000/tcp"
+    volumes:
+    - ./services/bind9/temp:/etc/bind
+    networks:
+      hw13_subnet:
+        ipv4_address: 172.16.1.10
+
+networks:
+  hw13_subnet:
+    external: true

@@ -9,12 +9,12 @@ services:
     - "53:53/tcp"
     - "10000:10000/tcp"
     volumes:
-    - ./services/bind9/temp:/etc/bind
+    - ./services/bind9:/etc/bind
     networks:
       hw13_subnet:
         ipv4_address: 172.16.1.10
 
-  balance_loader_ua:
+  load_balancer_ua:
     build: ./services/nginx
     volumes:
       - ./services/nginx/nginx_ua.conf:/etc/nginx/conf.d/nginx.conf
@@ -24,7 +24,7 @@ services:
       hw13_subnet:
         ipv4_address: 172.16.1.20
 
-  balance_loader_world:
+  load_balancer_world:
     build: ./services/nginx
     volumes:
       - ./services/nginx/nginx_world.conf:/etc/nginx/conf.d/nginx.conf
@@ -98,6 +98,13 @@ services:
     networks:
       hw13_subnet:
         ipv4_address: 172.16.1.100
+
+  siege:
+    image: yokogawa/siege
+    dns:
+      - 172.16.1.10
+    networks:
+      - hw13_subnet
 
 networks:
   hw13_subnet:

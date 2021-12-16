@@ -1,0 +1,20 @@
+graph TD
+    bind[bind<br>172.16.1.10]
+    lb_ua{load_balancer_ua<br>172.16.1.20}
+    lb_w{load_balancer_world<br>172.16.1.30}
+    bind-->lb_ua
+    bind-->lb_w
+
+    ua1(server_ua1)
+    ua2(server_ua2)
+    ua3(server_ua3)    
+    lb_ua-->ua1
+    lb_ua-->ua2
+    lb_ua-->ua3
+
+    w1(server_world1)
+    w2(server_world2)
+    w3(server_world3)    
+    lb_w-->w1
+    lb_w-->w2
+    lb_w-->w3

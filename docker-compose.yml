@@ -18,21 +18,31 @@ services:
     build: ./services/nginx
     volumes:
       - ./services/nginx/nginx_ua.conf:/etc/nginx/conf.d/nginx.conf
+      - ./data/nginx/cache:/tmp/cache
     ports:
       - 80
     networks:
       hw13_subnet:
         ipv4_address: 172.16.1.20
+    depends_on:
+      - server_ua1
+      - server_ua2
+      - server_ua3
 
   load_balancer_world:
     build: ./services/nginx
     volumes:
       - ./services/nginx/nginx_world.conf:/etc/nginx/conf.d/nginx.conf
+      - ./data/nginx/cache:/tmp/cache
     ports:
       - 80
     networks:
       hw13_subnet:
         ipv4_address: 172.16.1.30
+    depends_on:
+      - server_world1
+      - server_world2
+      - server_world3
 
   server_ua1:
     build: ./services/nginx
